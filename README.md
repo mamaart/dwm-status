@@ -1,4 +1,4 @@
-# 🚀 Statusbar for DWM
+# 📈 Statusbar for DWM
 
 > Maybe it can be used for other vms as well.
 
@@ -13,4 +13,6 @@
 ## 🔧 TODO's
 
 - [ ] Persist todo list
+- [ ] Make todolise more generic
+- [ ] Try to not use library for pulseaudio
 
