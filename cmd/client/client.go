@@ -7,7 +7,6 @@ import (
 	"log"
 	"net"
 	"net/http"
-	"os"
 
 	"github.com/mamaart/statusbar/internal/models"
 )
@@ -39,14 +38,6 @@ func (c *Client) Delete(id int) {
 		log.Fatal(err)
 	}
 	fmt.Println(resp.Status)
-}
-
-func Close() {
-	if err := os.Remove("/tmp/statusbar.sock"); err != nil {
-		fmt.Println("Error deleting socket file:", err)
-	} else {
-		fmt.Println("Socket file deleted.")
-	}
 }
 
 func unixClient(socketPath string) *http.Client {
