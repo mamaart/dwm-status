@@ -4,9 +4,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/mamaart/statusbar/internal/database"
 	"github.com/mamaart/statusbar/internal/models"
-	"github.com/mamaart/statusbar/internal/server"
+	"github.com/mamaart/statusbar/internal/statusbar/database"
+	"github.com/mamaart/statusbar/internal/statusbar/server"
 )
 
 const windowWidth = 40

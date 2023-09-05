@@ -4,14 +4,11 @@ import (
 	"strconv"
 
 	"github.com/mamaart/statusbar/internal/models"
+	"github.com/mamaart/statusbar/internal/statusbarctl/client"
 	"github.com/spf13/cobra"
 )
 
 func main() {
-	Cmd().Execute()
-}
-
-func Cmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Run: func(cmd *cobra.Command, args []string) {
 			cmd.Help()
@@ -20,8 +17,7 @@ func Cmd() *cobra.Command {
 
 	cmd.AddCommand(Add())
 	cmd.AddCommand(Del())
-
-	return cmd
+	cmd.ExecuteC()
 }
 
 func Del() *cobra.Command {
@@ -37,7 +33,7 @@ func Del() *cobra.Command {
 				cmd.Help()
 				return
 			}
-			New().Delete(id)
+			client.New().Delete(id)
 		},
 	}
 }
@@ -55,7 +51,7 @@ func Add() *cobra.Command {
 				cmd.Help()
 				return
 			}
-			New().Post(models.Task{
+			client.New().Post(models.Task{
 				Id:          id,
 				Description: args[1],
 			})

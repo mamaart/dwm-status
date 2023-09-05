@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/mamaart/statusbar/internal/application"
-	"github.com/mamaart/statusbar/internal/bar"
 	"github.com/mamaart/statusbar/internal/models"
+	"github.com/mamaart/statusbar/internal/statusbar/application"
+	"github.com/mamaart/statusbar/pkg/bar"
 )
 
 func main() {

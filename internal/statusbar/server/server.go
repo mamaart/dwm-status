@@ -11,8 +11,8 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/mamaart/statusbar/internal/database"
 	"github.com/mamaart/statusbar/internal/models"
+	"github.com/mamaart/statusbar/internal/statusbar/database"
 )
 
 type Server struct {
