@@ -6,7 +6,7 @@ import (
 
 type State struct {
 	Iface      IFace
-	Text       string
+	Text       Text
 	Time       Time
 	Volume     Volume
 	Battery    Battery

@@ -36,7 +36,7 @@ func (a *App) Run(ch chan<- models.State) {
 		case iface := <-a.iface:
 			s.Iface = iface
 		case txt := <-a.text:
-			s.Text = txt
+			s.Text = models.Text(txt)
 		case t := <-a.time:
 			s.Time = t
 		case v := <-a.volume:

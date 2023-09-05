@@ -10,8 +10,8 @@ func (a *App) timeLoop() models.Time {
 	for {
 		currentTime := time.Now()
 		a.time <- models.Time{
-			Calendar: currentTime.Format("2006-01-02"),
-			Clock:    currentTime.Format("15:04"),
+			Calendar: models.Calendar(currentTime.Format("01/02 2006")),
+			Clock:    models.Clock(currentTime.Format("15:04")),
 		}
 		time.Sleep(time.Minute)
 	}

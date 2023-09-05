@@ -1,7 +1,8 @@
 package models
 
 type Time struct {
-	Calendar, Clock string
+	Calendar Calendar
+	Clock    Clock
 }
 
 type Calendar string
