@@ -13,7 +13,7 @@ func (a *App) volumeLoop() {
 	}
 
 	v, _ := cli.Volume()
-	a.volume <- v
+	a.volume <- int(v * 100)
 
 	updates, err := cli.Updates()
 	if err != nil {
@@ -28,6 +28,6 @@ func (a *App) volumeLoop() {
 			continue
 		}
 
-		a.volume <- v
+		a.volume <- int(v * 100)
 	}
 }

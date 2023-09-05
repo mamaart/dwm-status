@@ -3,20 +3,22 @@ package application
 import "github.com/mamaart/statusbar/internal/models"
 
 type App struct {
-	iface   chan models.IFace
-	text    chan string
-	time    chan models.Time
-	volume  chan float32
-	battery chan models.Battery
+	iface      chan models.IFace
+	text       chan string
+	time       chan models.Time
+	volume     chan int
+	battery    chan models.Battery
+	brightness chan int
 }
 
 func New() *App {
 	return &App{
-		iface:   make(chan models.IFace),
-		text:    make(chan string),
-		time:    make(chan models.Time),
-		volume:  make(chan float32),
-		battery: make(chan models.Battery),
+		iface:      make(chan models.IFace),
+		text:       make(chan string),
+		time:       make(chan models.Time),
+		volume:     make(chan int),
+		battery:    make(chan models.Battery),
+		brightness: make(chan int),
 	}
 }
 
@@ -26,6 +28,7 @@ func (a *App) Run(ch chan<- models.State) {
 	go a.timeLoop()
 	go a.volumeLoop()
 	go a.batteryLoop()
+	go a.brightnessLoop()
 
 	var s models.State
 	for {
@@ -40,6 +43,8 @@ func (a *App) Run(ch chan<- models.State) {
 			s.Volume = v
 		case b := <-a.battery:
 			s.Battery = b
+		case b := <-a.brightness:
+			s.Brightness = b
 		}
 		ch <- s
 	}
