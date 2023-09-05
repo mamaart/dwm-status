@@ -15,6 +15,8 @@ func main() {
 		},
 	}
 
+	cmd.CompletionOptions.HiddenDefaultCmd = true
+
 	cmd.AddCommand(Add())
 	cmd.AddCommand(Del())
 	cmd.ExecuteC()
