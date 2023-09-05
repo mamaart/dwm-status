@@ -40,11 +40,11 @@ func (a *App) Run(ch chan<- models.State) {
 		case t := <-a.time:
 			s.Time = t
 		case v := <-a.volume:
-			s.Volume = v
+			s.Volume = models.Volume(v)
 		case b := <-a.battery:
 			s.Battery = b
 		case b := <-a.brightness:
-			s.Brightness = b
+			s.Brightness = models.Brightness(b)
 		}
 		ch <- s
 	}
