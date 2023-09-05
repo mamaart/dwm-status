@@ -21,7 +21,10 @@ func (db *DB) Run(callback chan<- []models.Task) {
 	for {
 		select {
 		case task := <-db.addCh:
-			db.tasks[id] = task
+			db.tasks[id] = models.Task{
+				Id:          id,
+				Description: task.Description,
+			}
 			id++
 		case id := <-db.delCh:
 			delete(db.tasks, id)
