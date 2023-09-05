@@ -3,7 +3,7 @@ package models
 import "fmt"
 
 type Task struct {
-	Id          int    `json:"id"`
+	Id          int    `json:"id,omitempty"`
 	Description string `json:"description"`
 }
 

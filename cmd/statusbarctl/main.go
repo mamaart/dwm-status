@@ -43,20 +43,14 @@ func Del() *cobra.Command {
 
 func Add() *cobra.Command {
 	return &cobra.Command{
-		Use:     "add id description",
-		Aliases: []string{"put", "ad", "addd"},
-		Args:    cobra.MinimumNArgs(2),
-		Example: `add 1 "go to work"`,
+		Use:     "add description",
+		Aliases: []string{"put"},
+		Args:    cobra.MinimumNArgs(1),
+		Example: `add "go to work"`,
 		Short:   "adds a task to your todolist",
 		Run: func(cmd *cobra.Command, args []string) {
-			id, err := strconv.Atoi(args[0])
-			if err != nil {
-				cmd.Help()
-				return
-			}
 			client.New().Post(models.Task{
-				Id:          id,
-				Description: args[1],
+				Description: args[0],
 			})
 		},
 	}

@@ -17,10 +17,12 @@ func New() *DB {
 }
 
 func (db *DB) Run(callback chan<- []models.Task) {
+	var id int
 	for {
 		select {
 		case task := <-db.addCh:
-			db.tasks[task.Id] = task
+			db.tasks[id] = task
+			id++
 		case id := <-db.delCh:
 			delete(db.tasks, id)
 		}
