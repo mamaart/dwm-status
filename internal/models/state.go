@@ -11,16 +11,18 @@ type State struct {
 	Volume     Volume
 	Battery    Battery
 	Brightness Brightness
+	Wttr       Wttr
 }
 
 func (s State) Bytes() []byte {
-	return []byte(fmt.Sprintf("%s | %s | %s | %s | %s | %s | %s",
+	return []byte(fmt.Sprintf("%s | %s | %s | %s | %s | %s | %s | %s",
 		s.Iface,
 		s.Brightness,
 		s.Volume,
 		s.Battery,
 		s.Time.Calendar,
 		s.Time.Clock,
+		&s.Wttr,
 		s.Text,
 	))
 }

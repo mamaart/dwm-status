@@ -9,6 +9,7 @@ type App struct {
 	volume     chan int
 	battery    chan models.Battery
 	brightness chan int
+	wttr       chan models.Wttr
 }
 
 func New() *App {
@@ -19,6 +20,7 @@ func New() *App {
 		volume:     make(chan int),
 		battery:    make(chan models.Battery),
 		brightness: make(chan int),
+		wttr:       make(chan models.Wttr),
 	}
 }
 
@@ -29,6 +31,7 @@ func (a *App) Run(ch chan<- models.State) {
 	go a.volumeLoop()
 	go a.batteryLoop()
 	go a.brightnessLoop()
+	go a.wttrLoop()
 
 	var s models.State
 	for {
@@ -45,6 +48,8 @@ func (a *App) Run(ch chan<- models.State) {
 			s.Battery = b
 		case b := <-a.brightness:
 			s.Brightness = models.Brightness(b)
+		case w := <-a.wttr:
+			s.Wttr = w
 		}
 		ch <- s
 	}
