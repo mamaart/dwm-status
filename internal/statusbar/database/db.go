@@ -18,7 +18,7 @@ func New() *DB {
 
 func (db *DB) Stream() <-chan []models.Task {
 	ch := make(chan []models.Task)
-	db.run(ch)
+	go db.run(ch)
 	return ch
 }
 

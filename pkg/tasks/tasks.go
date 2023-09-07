@@ -11,17 +11,23 @@ import (
 type Manager struct {
 	windowWidth int
 	database    ports.Database
+	delay       time.Duration
 }
 
 type Options struct {
 	WindowWidth int
 	Database    ports.Database
+	Delay       time.Duration
 }
 
 func New(options Options) *Manager {
+	if options.Delay == time.Duration(0) {
+		options.Delay = time.Millisecond * 500
+	}
 	return &Manager{
 		windowWidth: options.WindowWidth,
 		database:    options.Database,
+		delay:       options.Delay,
 	}
 }
 
@@ -32,6 +38,7 @@ func (t *Manager) Stream(errch chan<- error) (<-chan models.Text, error) {
 }
 
 func (t *Manager) stream(output chan<- models.Text) {
+
 	tasks := t.database.List()
 	input := t.database.Stream()
 
@@ -74,7 +81,7 @@ func (t *Manager) writeText(output chan<- models.Text, i int, text string) {
 	} else {
 		output <- models.Text(text[start:end])
 	}
-	time.Sleep(time.Millisecond * 200)
+	time.Sleep(t.delay)
 }
 
 func check(ch <-chan []models.Task) ([]models.Task, bool) {
