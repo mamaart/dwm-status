@@ -5,7 +5,7 @@ import (
 	"github.com/mamaart/statusbar/internal/models"
 )
 
-func Stream() (chan models.Volume, error) {
+func Stream(errch chan<- error) (chan models.Volume, error) {
 	cli, err := pulseaudio.NewClient()
 	if err != nil {
 		return nil, err
@@ -16,29 +16,35 @@ func Stream() (chan models.Volume, error) {
 		return nil, err
 	}
 
-	v, err := Get(cli)
-	if err != nil {
-		return nil, err
-	}
-
 	ch := make(chan models.Volume)
-	ch <- v
+	go stream(cli, updates, ch, errch)
+	return ch, nil
+}
 
-	go func(
-		cli *pulseaudio.Client,
-		input <-chan struct{},
-		output chan<- models.Volume,
-	) {
-		for range input {
-			v, err := Get(cli)
+func stream(
+	cli *pulseaudio.Client,
+	input <-chan struct{},
+	output chan<- models.Volume,
+	err chan<- error,
+) {
+	v, e := Get(cli)
+	if e != nil {
+		if err != nil {
+			err <- e
+		}
+	}
+	output <- v
+
+	for range input {
+		v, e := Get(cli)
+		if e != nil {
 			if err != nil {
-				continue
+				err <- e
 			}
+		} else {
 			output <- v
 		}
-	}(cli, updates, ch)
-
-	return ch, nil
+	}
 }
 
 func Get(cli *pulseaudio.Client) (models.Volume, error) {
