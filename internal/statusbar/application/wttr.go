@@ -14,10 +14,10 @@ func (a *App) wttrLoop() {
 		w, e := GetWttr()
 		if e != nil {
 			fmt.Println(e)
-			time.Sleep(time.Second * 10)
+			time.Sleep(time.Minute)
 		}
 		a.wttr <- w
-		time.Sleep(time.Second * 2)
+		time.Sleep(time.Minute * 10)
 
 	}
 }
