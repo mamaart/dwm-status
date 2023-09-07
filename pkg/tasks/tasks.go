@@ -5,26 +5,23 @@ import (
 	"time"
 
 	"github.com/mamaart/statusbar/internal/models"
-	"github.com/mamaart/statusbar/internal/tasks/database"
-	"github.com/mamaart/statusbar/internal/tasks/server"
+	"github.com/mamaart/statusbar/internal/ports"
 )
 
 type Manager struct {
 	windowWidth int
-	database    *database.DB
-	server      *server.Server
+	database    ports.Database
 }
 
-func New(windowWidth int) *Manager {
-	database := database.New()
-	server := server.New(database)
+type Options struct {
+	WindowWidth int
+	Database    ports.Database
+}
 
-	go server.Run()
-
+func New(options Options) *Manager {
 	return &Manager{
-		windowWidth: windowWidth,
-		database:    database,
-		server:      server,
+		windowWidth: options.WindowWidth,
+		database:    options.Database,
 	}
 }
 

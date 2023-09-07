@@ -12,16 +12,16 @@ import (
 	"syscall"
 
 	"github.com/mamaart/statusbar/internal/models"
-	"github.com/mamaart/statusbar/internal/tasks/database"
+	"github.com/mamaart/statusbar/internal/ports"
 )
 
 type Server struct {
-	db       *database.DB
+	db       ports.Database
 	Handler  http.HandlerFunc
 	taskList chan []models.Task
 }
 
-func New(db *database.DB) *Server {
+func New(db ports.Database) *Server {
 	return &Server{
 		db: db,
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

@@ -2,6 +2,7 @@ package statusbar
 
 import (
 	"github.com/mamaart/statusbar/internal/models"
+	"github.com/mamaart/statusbar/internal/ports"
 	"github.com/mamaart/statusbar/pkg/battery"
 	"github.com/mamaart/statusbar/pkg/brightness"
 	"github.com/mamaart/statusbar/pkg/datetime"
@@ -21,7 +22,7 @@ type StatusBar struct {
 	wttr       <-chan models.Wttr
 }
 
-func New() (*StatusBar, error) {
+func New(db ports.Database) (*StatusBar, error) {
 	iface, err := network.Stream(nil)
 	if err != nil {
 		return nil, err
@@ -47,7 +48,10 @@ func New() (*StatusBar, error) {
 		return nil, err
 	}
 
-	text, err := tasks.New(40).Stream(nil)
+	text, err := tasks.New(tasks.Options{
+		WindowWidth: 40,
+		Database:    db,
+	}).Stream(nil)
 	if err != nil {
 		return nil, err
 	}
