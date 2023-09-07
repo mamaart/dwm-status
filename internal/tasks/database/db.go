@@ -16,7 +16,13 @@ func New() *DB {
 	}
 }
 
-func (db *DB) Run(callback chan<- []models.Task) {
+func (db *DB) Stream() chan []models.Task {
+	ch := make(chan []models.Task)
+	db.run(ch)
+	return ch
+}
+
+func (db *DB) run(callback chan<- []models.Task) {
 	var id int
 	for {
 		select {

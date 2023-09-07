@@ -12,7 +12,7 @@ import (
 	"syscall"
 
 	"github.com/mamaart/statusbar/internal/models"
-	"github.com/mamaart/statusbar/internal/statusbar/database"
+	"github.com/mamaart/statusbar/internal/tasks/database"
 )
 
 type Server struct {
