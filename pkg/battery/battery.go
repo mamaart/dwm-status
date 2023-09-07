@@ -31,7 +31,7 @@ func Get() (b models.Battery, err error) {
 	}, nil
 }
 
-func Stream(errch chan<- error) (chan models.Battery, error) {
+func Stream(errch chan<- error) (<-chan models.Battery, error) {
 	ch := make(chan models.Battery)
 	go stream(ch, errch)
 	return ch, nil

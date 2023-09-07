@@ -5,7 +5,15 @@ import (
 	"github.com/mamaart/statusbar/internal/models"
 )
 
-func Stream(errch chan<- error) (chan models.Volume, error) {
+func Get(cli *pulseaudio.Client) (models.Volume, error) {
+	v, err := cli.Volume()
+	if err != nil {
+		return models.Volume(0), err
+	}
+	return models.Volume(v * 100), nil
+}
+
+func Stream(errch chan<- error) (<-chan models.Volume, error) {
 	cli, err := pulseaudio.NewClient()
 	if err != nil {
 		return nil, err
@@ -45,12 +53,4 @@ func stream(
 			output <- v
 		}
 	}
-}
-
-func Get(cli *pulseaudio.Client) (models.Volume, error) {
-	v, err := cli.Volume()
-	if err != nil {
-		return models.Volume(0), err
-	}
-	return models.Volume(v * 100), nil
 }

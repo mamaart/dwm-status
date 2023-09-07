@@ -23,7 +23,7 @@ func Get() (models.Brightness, error) {
 	return models.Brightness((val * 100) / 255), nil
 }
 
-func Stream(errch chan<- error) (chan<- models.Brightness, error) {
+func Stream(errch chan<- error) (<-chan models.Brightness, error) {
 	ch := make(chan models.Brightness)
 	go stream(ch, errch)
 	return ch, nil

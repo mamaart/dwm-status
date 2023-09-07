@@ -20,7 +20,7 @@ func Get() (b models.Wttr, err error) {
 	return models.Wttr{Temp: string(bts)}, nil
 }
 
-func Stream(errch chan<- error) (chan models.Wttr, error) {
+func Stream(errch chan<- error) (<-chan models.Wttr, error) {
 	ch := make(chan models.Wttr)
 	go stream(ch, errch)
 	return ch, nil

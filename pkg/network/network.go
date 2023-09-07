@@ -34,7 +34,7 @@ func Get() (out models.IFace, err error) {
 	return out, errors.New("didn't find any global unicast")
 }
 
-func Stream(errch chan<- error) (chan models.IFace, error) {
+func Stream(errch chan<- error) (<-chan models.IFace, error) {
 	ch := make(chan models.IFace)
 	go stream(ch, errch)
 	return ch, nil

@@ -9,12 +9,12 @@ import (
 func Get() models.Time {
 	currentTime := time.Now()
 	return models.Time{
-		Calendar: models.Calendar(currentTime.Format("01/02 2006")),
+		Calendar: models.Calendar(currentTime.Format("02 Jan 2006")),
 		Clock:    models.Clock(currentTime.Format("15:04")),
 	}
 }
 
-func Stream(chan<- error) (chan models.Time, error) {
+func Stream(chan<- error) (<-chan models.Time, error) {
 	ch := make(chan models.Time)
 	go stream(ch)
 	return ch, nil
