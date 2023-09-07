@@ -81,7 +81,6 @@ func check(ch <-chan []models.Task) ([]models.Task, bool) {
 	select {
 	case t := <-ch:
 		return t, true
-
 	default:
 		return nil, false
 	}
@@ -99,12 +98,10 @@ func tasksToText(tasks []models.Task) string {
 		sb.WriteString(" ")
 	}
 
-	text := sb.String()
-
-	if len(text) < 40 {
-		pad := strings.Repeat(" ", 40-len(text))
-		text = pad + text
+	if sb.Len() < 40 {
+		pad := strings.Repeat(" ", 40-sb.Len())
+		return pad + sb.String()
 	}
 
-	return text
+	return sb.String()
 }
