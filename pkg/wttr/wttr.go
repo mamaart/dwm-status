@@ -9,7 +9,7 @@ import (
 )
 
 func Get() (b models.Wttr, err error) {
-	r, e := http.Get(`https://wttr.in/Copenhagen?format=%c+%t`)
+	r, e := http.Get(`https://wttr.in/Copenhagen?format=%c%t`)
 	if e != nil {
 		return b, e
 	}
