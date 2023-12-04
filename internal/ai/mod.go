@@ -36,7 +36,6 @@ func Ask(q string) error {
 		return fmt.Errorf("failed to make llm: %s", err)
 	}
 
-	// b := make([]byte, 1)
 	if _, err := llm.Call(
 		context.Background(),
 		q,
