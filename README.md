@@ -16,6 +16,7 @@ The service can show some standard information about the computer, but it also h
 
 ## 🔧 TODO's
 
+- [ ] Controll the speed and make it possible the pause the text and maybe repeat.
 - [ ] Try to not use library for pulseaudio (make it yourself)
 - [ ] Add command to change speed
 - [ ] Test in on something else than DWM
