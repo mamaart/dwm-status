@@ -12,18 +12,15 @@ The service can show some standard information about the computer, but it also h
 - [x] Volume from pulseaudio
 - [x] Brightness
 - [x] Date and time
-- [x] Todo list
+- [x] Ask LLM AI
 
 ## 🔧 TODO's
 
-- [ ] Persist todo list
-- [ ] Make todolise more generic
 - [ ] Try to not use library for pulseaudio (make it yourself)
-- [ ] Add command for edit
-- [ ] Change add to only take content (no id)
-- [ ] Add command to show or hide ids
 - [ ] Add command to change speed
-- [ ] Change lamp emoji and change status in If statement
 - [ ] Test in on something else than DWM
+- [ ] window width should be UTF8 or 16 strings not bytes 
+- [ ] add stop command for AI stream (maybe)
+- [ ] Take AI out of statusbar and make a stream thingy that accepts a pipe
 - [ ] Write tests (find out what it the best way to write tests when you are interacting with the os)
 
