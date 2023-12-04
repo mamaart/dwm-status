@@ -7,22 +7,24 @@ import (
 type State struct {
 	Iface      IFace
 	Text       Text
-	Time       Time
+	Clock      Time
 	Volume     Volume
 	Battery    Battery
 	Brightness Brightness
 	Wttr       Wttr
+	Disk       Disk
 }
 
 func (s State) Bytes() []byte {
-	return []byte(fmt.Sprintf("%s | %s | %s | %s | %s | %s | %s | %s",
+	return []byte(fmt.Sprintf("%s | %s | %s | %s | %s | %s | %s | %s | %s ",
 		s.Iface,
 		s.Brightness,
 		s.Volume,
 		s.Battery,
-		s.Time.Calendar,
-		s.Time.Clock,
+		s.Clock.Calendar,
+		s.Clock.Clock,
 		&s.Wttr,
+		s.Disk,
 		s.Text,
 	))
 }

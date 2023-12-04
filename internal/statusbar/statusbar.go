@@ -1,13 +1,15 @@
 package statusbar
 
 import (
+	"time"
+
 	"github.com/mamaart/statusbar/internal/models"
-	"github.com/mamaart/statusbar/internal/ports"
+	"github.com/mamaart/statusbar/pkg/ai"
 	"github.com/mamaart/statusbar/pkg/battery"
 	"github.com/mamaart/statusbar/pkg/brightness"
 	"github.com/mamaart/statusbar/pkg/datetime"
+	"github.com/mamaart/statusbar/pkg/disk"
 	"github.com/mamaart/statusbar/pkg/network"
-	"github.com/mamaart/statusbar/pkg/tasks"
 	"github.com/mamaart/statusbar/pkg/volume"
 	"github.com/mamaart/statusbar/pkg/wttr"
 )
@@ -15,19 +17,20 @@ import (
 type StatusBar struct {
 	iface      <-chan models.IFace
 	text       <-chan models.Text
-	time       <-chan models.Time
+	clock      <-chan models.Time
 	volume     <-chan models.Volume
 	battery    <-chan models.Battery
 	brightness <-chan models.Brightness
+	disk       <-chan models.Disk
 	wttr       <-chan models.Wttr
 }
 
-func New(db ports.Database) (*StatusBar, error) {
+func New(bytes <-chan byte) (*StatusBar, error) {
 	iface, err := network.Stream(nil)
 	if err != nil {
 		return nil, err
 	}
-	time, err := datetime.Stream(nil)
+	clock, err := datetime.Stream(nil)
 	if err != nil {
 		return nil, err
 	}
@@ -47,10 +50,13 @@ func New(db ports.Database) (*StatusBar, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	text, err := tasks.New(tasks.Options{
-		WindowWidth: 40,
-		Database:    db,
+	disk, err := disk.Stream(nil)
+	if err != nil {
+		return nil, err
+	}
+	text, err := ai.New(bytes, ai.Options{
+		WindowWidth: 80,
+		Delay:       time.Millisecond * 150,
 	}).Stream(nil)
 	if err != nil {
 		return nil, err
@@ -59,11 +65,12 @@ func New(db ports.Database) (*StatusBar, error) {
 	return &StatusBar{
 		text:       text,
 		iface:      iface,
-		time:       time,
+		clock:      clock,
 		volume:     volume,
 		battery:    battery,
 		brightness: brightness,
 		wttr:       wttr,
+		disk:       disk,
 	}, nil
 }
 
@@ -75,8 +82,8 @@ func (a *StatusBar) Run(ch chan<- models.State) {
 			s.Iface = iface
 		case txt := <-a.text:
 			s.Text = txt
-		case t := <-a.time:
-			s.Time = t
+		case t := <-a.clock:
+			s.Clock = t
 		case v := <-a.volume:
 			s.Volume = v
 		case b := <-a.battery:
@@ -85,6 +92,8 @@ func (a *StatusBar) Run(ch chan<- models.State) {
 			s.Brightness = b
 		case w := <-a.wttr:
 			s.Wttr = w
+		case d := <-a.disk:
+			s.Disk = d
 		}
 		ch <- s
 	}

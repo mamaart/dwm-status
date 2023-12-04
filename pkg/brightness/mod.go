@@ -10,7 +10,9 @@ import (
 )
 
 func Get() (models.Brightness, error) {
-	data, err := os.ReadFile("/sys/class/backlight/amdgpu_bl0/brightness") //TODO make more generic (amdgpu_bl0)
+	data, err := os.ReadFile(
+		"/sys/class/backlight/amdgpu_bl1/brightness",
+	) // TODO make more generic (amdgpu_bl0)
 	if err != nil {
 		return 0, err
 	}

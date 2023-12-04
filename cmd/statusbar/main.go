@@ -5,25 +5,24 @@ import (
 
 	"github.com/mamaart/statusbar/internal/models"
 	"github.com/mamaart/statusbar/internal/statusbar"
-	"github.com/mamaart/statusbar/internal/statusbar/database"
 	"github.com/mamaart/statusbar/internal/statusbar/server"
 	"github.com/mamaart/statusbar/pkg/bar"
 )
 
 func main() {
 	bar := bar.New()
-	ch := make(chan models.State)
-	db := database.New()
+	output := make(chan models.State)
+	input := make(chan byte)
 
-	app, err := statusbar.New(db)
+	app, err := statusbar.New(input)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	go server.New(db).Run()
-	go app.Run(ch)
+	go server.Run(input)
+	go app.Run(output)
 
-	for x := range ch {
+	for x := range output {
 		bar.Update(x.Bytes())
 	}
 }

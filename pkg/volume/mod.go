@@ -14,7 +14,7 @@ func Get(cli *pulseaudio.Client) (models.Volume, error) {
 }
 
 func Stream(errch chan<- error) (<-chan models.Volume, error) {
-	cli, err := pulseaudio.NewClient()
+	cli, err := pulseaudio.NewClient("/run/user/1000/pulse/native")
 	if err != nil {
 		return nil, err
 	}

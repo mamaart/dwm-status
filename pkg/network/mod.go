@@ -2,10 +2,11 @@ package network
 
 import (
 	"errors"
+	"log"
 	"net"
-	"time"
 
 	"github.com/mamaart/statusbar/internal/models"
+	"github.com/vishvananda/netlink"
 )
 
 func Get() (out models.IFace, err error) {
@@ -41,16 +42,28 @@ func Stream(errch chan<- error) (<-chan models.IFace, error) {
 }
 
 func stream(output chan<- models.IFace, err chan<- error) {
-	for {
-		w, e := Get()
-		if e != nil {
+	ch := make(chan netlink.AddrUpdate)
+	done := make(chan struct{})
+	if err := netlink.AddrSubscribeWithOptions(ch, done, netlink.AddrSubscribeOptions{
+		ListExisting: true,
+	}); err != nil {
+		log.Println(err)
+		return
+	}
+	for x := range ch {
+		if x.LinkAddress.IP.IsGlobalUnicast() {
+			iface, err := net.InterfaceByIndex(x.LinkIndex)
 			if err != nil {
-				err <- e
+				output <- models.IFace{
+					Name: "unknown",
+					Addr: x.LinkAddress.IP.String(),
+				}
+			} else {
+				output <- models.IFace{
+					Name: iface.Name,
+					Addr: x.LinkAddress.IP.String(),
+				}
 			}
-			time.Sleep(time.Minute)
-		} else {
-			output <- w
-			time.Sleep(time.Minute * 10)
 		}
 	}
 }
