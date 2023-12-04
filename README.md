@@ -2,9 +2,9 @@
 
 ![GitHub](https://img.shields.io/github/license/mamaart/dwm-status)
 
-This is actually two programs in one. Its a service that is meant to be run in the background, and it is a client as well to add or delete todo items from the service.
+This is actually two programs in one. Its a service that is meant to be run in the background, and it is a client as well to send a text stream to the statusbar
 
-The service can show some standard information about the computer, but it also has an infinite rolling text field which is used to show todo items.
+The service can show some standard information about the computer, but it also has an infinite rolling text field which is used to show answers from AI
 
 ## ⚡️Some features
 
