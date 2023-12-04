@@ -20,7 +20,7 @@ The service can show some standard information about the computer, but it also h
 - [ ] Add command to change speed
 - [ ] Test in on something else than DWM
 - [ ] window width should be UTF8 or 16 strings not bytes 
-- [ ] add stop command for AI stream (maybe)
+- [ ] add stop command for AI stream (maybe) use multiple endpoints
 - [ ] Fix formatting and avoid large code chunks
 - [ ] Make ai know system information
 - [ ] Make ai access local database of relevant stuff
