@@ -1,18 +1,20 @@
 package datetime
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/mamaart/statusbar/internal/models"
 )
 
-func Get() models.Time {
-	currentTime := time.Now()
-	return models.Time{
-		Calendar: models.Calendar(currentTime.Format("02 Jan 2006")),
-		Clock:    models.Clock(currentTime.Format("15:04")),
-	}
-}
+type WatchFace uint
+
+const (
+	Clock WatchFace = iota
+	Date
+	Weeknumber
+	Day
+)
 
 func Stream(chan<- error) (<-chan models.Time, error) {
 	ch := make(chan models.Time)
@@ -21,8 +23,24 @@ func Stream(chan<- error) (<-chan models.Time, error) {
 }
 
 func stream(output chan<- models.Time) {
+	state := Clock
 	for {
-		output <- Get()
-		time.Sleep(time.Minute)
+		t := time.Now()
+		switch state {
+		case Clock:
+			output <- models.Clock(t.Format("15:04"))
+			state = Date
+		case Date:
+			output <- models.Calendar(t.Format("02 Jan 2006"))
+			state = Weeknumber
+		case Weeknumber:
+			_, w := t.ISOWeek()
+			output <- models.WeekNo(fmt.Sprintf("Week: %d", w))
+			state = Day
+		case Day:
+			output <- models.Day(t.Weekday().String())
+			state = Clock
+		}
+		time.Sleep(time.Second * 10)
 	}
 }

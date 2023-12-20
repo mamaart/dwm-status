@@ -16,13 +16,12 @@ type State struct {
 }
 
 func (s State) Bytes() []byte {
-	return []byte(fmt.Sprintf("%s | %s | %s | %s | %s | %s | %s | %s | %s ",
+	return []byte(fmt.Sprintf("%s | %s | %s | %s | %s | %s | %s | %s ",
+		s.Clock,
 		s.Iface,
 		s.Brightness,
 		s.Volume,
 		s.Battery,
-		s.Clock.Calendar,
-		s.Clock.Clock,
 		&s.Wttr,
 		s.Disk,
 		s.Text,
