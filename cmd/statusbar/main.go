@@ -13,13 +13,14 @@ func main() {
 	bar := bar.New()
 	output := make(chan models.State)
 	input := make(chan byte)
+	clockstate := make(chan struct{})
 
-	app, err := statusbar.New(input)
+	app, err := statusbar.New(input, clockstate)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	go server.NewServer(input).ListenAndServe()
+	go server.NewServer(input, clockstate).ListenAndServe()
 	go app.Run(output)
 
 	for x := range output {

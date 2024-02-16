@@ -25,12 +25,12 @@ type StatusBar struct {
 	wttr       <-chan models.Wttr
 }
 
-func New(bytes <-chan byte) (*StatusBar, error) {
+func New(bytes <-chan byte, clockstate <-chan struct{}) (*StatusBar, error) {
 	iface, err := network.Stream(nil)
 	if err != nil {
 		return nil, err
 	}
-	clock, err := datetime.Stream(nil)
+	clock, err := datetime.Stream(clockstate, nil)
 	if err != nil {
 		return nil, err
 	}
