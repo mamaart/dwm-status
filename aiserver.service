@@ -1,0 +1,11 @@
+[Unit]
+Description=AI server
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/aiserver
+Type=simple
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
