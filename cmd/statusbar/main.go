@@ -19,7 +19,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	go server.Run(input)
+	go server.NewServer(input).ListenAndServe()
 	go app.Run(output)
 
 	for x := range output {

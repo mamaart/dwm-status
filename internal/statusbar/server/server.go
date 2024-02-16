@@ -1,56 +1,47 @@
 package server
 
 import (
-	"context"
-	"crypto/tls"
 	"log"
-	"time"
+	"net/http"
 
-	"github.com/mamaart/statusbar/pkg/p256"
-	"github.com/quic-go/quic-go"
+	"github.com/gorilla/mux"
+	"github.com/gorilla/websocket"
 )
 
-func Run(ch chan<- byte) {
-	// p256.Generate("olla")
+type Server struct {
+	upgrader *websocket.Upgrader
+	ch       chan<- byte
+}
 
-	listener, err := quic.ListenAddr(":4343", &tls.Config{
-		Certificates: []tls.Certificate{p256.Get("/etc/statusbar/olla")},
-		NextProtos:   []string{"dwm-status"},
-	}, nil)
-	if err != nil {
-		panic(err)
-	}
-
-	for {
-		conn, err := listener.Accept(context.Background())
-		if err != nil {
-			log.Println(err)
-			time.Sleep(time.Second * 5)
-			continue
-		}
-		stream, err := conn.AcceptStream(context.Background())
-		if err != nil {
-			log.Println(err)
-			time.Sleep(time.Second * 5)
-			continue
-		}
-		b := make([]byte, 256)
-		for {
-			n, err := stream.Read(b)
-			if err != nil {
-				log.Println(err)
-				break
-			}
-			for _, b := range b[:n] {
-				ch <- b
-			}
-		}
+func NewServer(ch chan<- byte) *Server {
+	return &Server{
+		upgrader: &websocket.Upgrader{},
+		ch:       ch,
 	}
 }
 
-func must[T any](v T, err error) T {
+func (s *Server) ListenAndServe() error {
+	router := mux.NewRouter()
+	router.HandleFunc("/stream", s.ai)
+
+	return http.ListenAndServe(":4545", router)
+}
+
+func (s *Server) ai(w http.ResponseWriter, r *http.Request) {
+	conn, err := s.upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		panic(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
-	return v
+
+	for {
+		_, data, err := conn.ReadMessage()
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		for _, b := range data {
+			s.ch <- b
+		}
+	}
 }

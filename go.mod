@@ -3,6 +3,8 @@ module github.com/mamaart/statusbar
 go 1.20
 
 require (
+	github.com/gorilla/mux v1.8.1
+	github.com/gorilla/websocket v1.5.1
 	github.com/jezek/xgb v1.1.0
 	github.com/mafik/pulseaudio v0.0.0-20200511091429-8449222912dd
 	github.com/quic-go/quic-go v0.40.0
