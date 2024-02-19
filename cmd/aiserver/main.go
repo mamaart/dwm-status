@@ -3,16 +3,14 @@ package main
 import (
 	"log"
 
-	"github.com/mamaart/statusbar/pkg/ai/server"
+	"github.com/mamaart/statusbar/pkg/aiservice"
 	"github.com/tmc/langchaingo/llms/ollama"
 )
 
 func main() {
-	// TODO run server
 	llm, err := ollama.New(ollama.WithModel("mistral"))
 	if err != nil {
 		log.Fatalf("failed to make llm: %s", err)
 	}
-	s := server.NewServer(llm)
-	log.Fatal(s.ListenAndServe())
+	log.Fatal(aiservice.New(llm).ListenAndServe())
 }

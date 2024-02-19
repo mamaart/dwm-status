@@ -1,9 +1,12 @@
 package main
 
 import (
+	"fmt"
+	"io"
 	"log"
+	"net/http"
+	"net/url"
 
-	"github.com/mamaart/statusbar/pkg/ai"
 	"github.com/spf13/cobra"
 )
 
@@ -20,9 +23,18 @@ func Ask() *cobra.Command {
 		Example: `ask "what is 2 + 2?"`,
 		Short:   "asks a question to the ai",
 		Run: func(_ *cobra.Command, args []string) {
-			if err := ai.Ask(args[0]); err != nil {
+			v := url.Values{}
+			v.Add("question", args[0])
+			resp, err := http.PostForm("http://localhost:4343/ask", v)
+			if err != nil {
 				log.Fatal(err)
 			}
+			fmt.Println(resp.Status)
+			data, err := io.ReadAll(resp.Body)
+			if err != nil {
+				log.Fatal(err)
+			}
+			fmt.Println(string(data))
 		},
 	}
 }

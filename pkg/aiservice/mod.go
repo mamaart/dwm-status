@@ -1,4 +1,4 @@
-package server
+package aiservice
 
 import (
 	"context"
@@ -11,22 +11,22 @@ import (
 	"github.com/tmc/langchaingo/llms/ollama"
 )
 
-type Server struct {
+type AiService struct {
 	llm *ollama.LLM
 }
 
-func NewServer(llm *ollama.LLM) *Server {
-	return &Server{llm: llm}
+func New(llm *ollama.LLM) *AiService {
+	return &AiService{llm: llm}
 }
 
-func (s *Server) ListenAndServe() error {
+func (s *AiService) ListenAndServe() error {
 	router := mux.NewRouter()
 	router.HandleFunc("/ask", s.ask)
 
 	return http.ListenAndServe(":4343", router)
 }
 
-func (s *Server) ask(w http.ResponseWriter, r *http.Request) {
+func (s *AiService) ask(w http.ResponseWriter, r *http.Request) {
 	q := r.FormValue("question")
 	if q == "" {
 		http.Error(w, "missing question", http.StatusNotAcceptable)

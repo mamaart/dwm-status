@@ -17,6 +17,8 @@ import (
 
 func main() {
 	var (
+		api = api.New()
+
 		tim = timemodule.New()
 		bat = batterymodule.New()
 		vol = volumemodule.New()
@@ -31,5 +33,15 @@ func main() {
 	)
 
 	go api.Run(tim, txt)
-	ui.Run(net, dsk, bri, vol, bat, tim, wtr, txt)
+
+	ui.Run(
+		net.Reader(),
+		dsk.Reader(),
+		bri.Reader(),
+		vol.Reader(),
+		bat.Reader(),
+		tim.Reader(),
+		wtr.Reader(),
+		txt.Reader(),
+	)
 }
