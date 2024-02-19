@@ -1,29 +1,35 @@
 package main
 
 import (
-	"log"
+	"time"
 
-	"github.com/mamaart/statusbar/internal/models"
-	"github.com/mamaart/statusbar/internal/statusbar"
-	"github.com/mamaart/statusbar/internal/statusbar/server"
-	"github.com/mamaart/statusbar/pkg/bar"
+	"github.com/mamaart/statusbar/internal/api"
+	"github.com/mamaart/statusbar/internal/ui"
+	"github.com/mamaart/statusbar/modules/batterymodule"
+	"github.com/mamaart/statusbar/modules/brightnessmodule"
+	"github.com/mamaart/statusbar/modules/diskmodule"
+	"github.com/mamaart/statusbar/modules/netmodule"
+	"github.com/mamaart/statusbar/modules/textmodule"
+	"github.com/mamaart/statusbar/modules/timemodule"
+	"github.com/mamaart/statusbar/modules/volumemodule"
+	"github.com/mamaart/statusbar/modules/wttrmodule"
 )
 
 func main() {
-	bar := bar.New()
-	output := make(chan models.State)
-	input := make(chan byte)
-	clockstate := make(chan struct{})
+	var (
+		tim = timemodule.New()
+		bat = batterymodule.New()
+		vol = volumemodule.New()
+		bri = brightnessmodule.New()
+		wtr = wttrmodule.New()
+		net = netmodule.New()
+		dsk = diskmodule.New()
+		txt = textmodule.New(textmodule.Options{
+			WindowWidth: 80,
+			Delay:       time.Millisecond * 150,
+		})
+	)
 
-	app, err := statusbar.New(input, clockstate)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	go server.NewServer(input, clockstate).ListenAndServe()
-	go app.Run(output)
-
-	for x := range output {
-		bar.Update(x.Bytes())
-	}
+	go api.Run(tim, txt)
+	ui.Run(net, dsk, bri, vol, bat, tim, wtr, txt)
 }

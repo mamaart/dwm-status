@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/mamaart/statusbar/internal/ai"
+	"github.com/mamaart/statusbar/pkg/ai"
 	"github.com/spf13/cobra"
 )
 

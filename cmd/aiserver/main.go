@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/mamaart/statusbar/internal/ai/server"
+	"github.com/mamaart/statusbar/pkg/ai/server"
 	"github.com/tmc/langchaingo/llms/ollama"
 )
 
