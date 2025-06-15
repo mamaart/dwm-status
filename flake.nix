@@ -21,12 +21,12 @@
     };
   }) // {
     nixosModules.default = {config, lib, pkgs, ...}: {
-      options.services.dwm-status = {
+      options.services.statusbar = {
         enable = lib.mkEnableOption "Enable dwm-statusbar";
       };
 
-      config = lib.mkIf config.services.dwm-status.enable {
-        systemd.user.services.dwm-status = {
+      config = lib.mkIf config.services.statusbar.enable {
+        systemd.user.services.statusbar = {
           description = "DWM statusbar";
           wantedBy = ["default.target"];
           after = ["graphical-session.target"];
