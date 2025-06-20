@@ -33,6 +33,7 @@
           serviceConfig = {
             ExecStart = "${self.packages.${pkgs.system}.default}/bin/statusbar";
             Restart = "always";
+            RestartSec = "5s";
             Type = "simple";
           };
           environment = {
